@@ -2,6 +2,8 @@ package com.amazon.ata.kindlepublishingservice.dao;
 
 import com.amazon.ata.kindlepublishingservice.dynamodb.models.CatalogItemVersion;
 import com.amazon.ata.kindlepublishingservice.exceptions.BookNotFoundException;
+import com.amazon.ata.kindlepublishingservice.exceptions.UnableToDeleteBookException;
+import com.amazon.ata.kindlepublishingservice.models.Book;
 import com.amazon.ata.kindlepublishingservice.publishing.KindleFormattedBook;
 import com.amazon.ata.kindlepublishingservice.utils.KindlePublishingUtils;
 
@@ -57,5 +59,21 @@ public class CatalogDao {
             return null;
         }
         return results.get(0);
+    }
+
+    public void deleteBookFromCatalog(String bookId) {
+        CatalogItemVersion book = getLatestVersionOfBook(bookId);
+
+        if (book == null || book.isInactive()) {
+            throw new BookNotFoundException(String.format("No book found for id: %s", bookId));
+        }
+
+        book.setBookId(bookId);
+        book.setInactive(true);
+        try {
+            dynamoDbMapper.save(book);
+        } catch (Exception e) {
+            throw new UnableToDeleteBookException("Unable to delete book from the catalog");
+        }
     }
 }
