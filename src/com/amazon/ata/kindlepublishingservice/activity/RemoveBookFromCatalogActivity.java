@@ -20,7 +20,10 @@ public class RemoveBookFromCatalogActivity {
     RemoveBookFromCatalogActivity(CatalogDao catalogDao) {
         this.catalogDao = catalogDao;
     }
+
+
     public RemoveBookFromCatalogResponse execute(RemoveBookFromCatalogRequest request) {
+
         catalogDao.deleteBookFromCatalog(request.getBookId());
         String message = String.format("Deleted the %s book successfully", request.getBookId());
 

@@ -23,4 +23,13 @@ public class DataAccessModule {
 
         return new DynamoDBMapper(amazonDynamoDBClient);
     }
+//    @Provides
+//    public DynamoDBMapper provideDynamoDBMapper() {
+//        AmazonDynamoDB amazonDynamoDBClient = AmazonDynamoDBClientBuilder.standard()
+//                .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
+//                .withRegion(Regions.US_EAST_2)
+//                .build();
+//
+//        return new DynamoDBMapper(amazonDynamoDBClient);
+//    }
 }

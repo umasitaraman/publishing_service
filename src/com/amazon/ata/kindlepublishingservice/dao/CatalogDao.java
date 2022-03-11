@@ -76,4 +76,12 @@ public class CatalogDao {
             throw new UnableToDeleteBookException("Unable to delete book from the catalog");
         }
     }
+
+    public void validateBookExists(String bookId) {
+        CatalogItemVersion book = getLatestVersionOfBook(bookId);
+        if (book == null) {
+            String message = String.format("The %s book is not present in the catalog", bookId);
+            throw new BookNotFoundException(message);
+        }
+    }
 }
