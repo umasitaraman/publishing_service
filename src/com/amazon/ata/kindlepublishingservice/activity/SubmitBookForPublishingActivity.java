@@ -36,10 +36,10 @@ public class SubmitBookForPublishingActivity {
      * @param publishingStatusDao PublishingStatusDao to access the publishing status table.
      */
     @Inject
-    public SubmitBookForPublishingActivity(PublishingStatusDao publishingStatusDao, CatalogDao catalogDao) {
+    public SubmitBookForPublishingActivity(PublishingStatusDao publishingStatusDao, CatalogDao catalogDao, BookPublishRequestManager bookPublishRequestManager) {
         this.publishingStatusDao = publishingStatusDao;
         this.catalogDao = catalogDao;
-        //this.bookPublishRequestManager = bookPublishRequestManager;
+        this.bookPublishRequestManager = bookPublishRequestManager;
     }
 
     /**
@@ -64,7 +64,7 @@ public class SubmitBookForPublishingActivity {
         Queue<BookPublishRequest> bookPublishRequests = new ArrayDeque<>();
         bookPublishRequests.add(bookPublishRequest);
 
-        BookPublishRequestManager bookPublishRequestManager = new BookPublishRequestManager(bookPublishRequests);
+        //BookPublishRequestManager bookPublishRequestManager = new BookPublishRequestManager(bookPublishRequests);
 
         bookPublishRequestManager.addBookPublishRequest(bookPublishRequest);
 
