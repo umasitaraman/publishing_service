@@ -64,8 +64,6 @@ public class SubmitBookForPublishingActivity {
         Queue<BookPublishRequest> bookPublishRequests = new ArrayDeque<>();
         bookPublishRequests.add(bookPublishRequest);
 
-        //BookPublishRequestManager bookPublishRequestManager = new BookPublishRequestManager(bookPublishRequests);
-
         bookPublishRequestManager.addBookPublishRequest(bookPublishRequest);
 
         PublishingStatusItem item =  publishingStatusDao.setPublishingStatus(bookPublishRequest.getPublishingRecordId(),
