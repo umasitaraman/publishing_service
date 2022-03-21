@@ -84,4 +84,30 @@ public class CatalogDao {
             throw new BookNotFoundException(message);
         }
     }
+
+    public CatalogItemVersion createOrUpdateBook(KindleFormattedBook book) {
+        if (book.getBookId() == null) {
+            CatalogItemVersion newBook = new CatalogItemVersion();
+            newBook.setBookId(KindlePublishingUtils.generateBookId());
+            newBook.setVersion(1);
+            newBook.setAuthor(book.getAuthor());
+            newBook.setTitle(book.getTitle());
+            newBook.setGenre(book.getGenre());
+            newBook.setInactive(false);
+            newBook.setText(book.getText());
+            dynamoDbMapper.save(newBook);// create new book and save to DB
+            return getLatestVersionOfBook(newBook.getBookId());
+        } else {
+            CatalogItemVersion updateBook = getLatestVersionOfBook(book.getBookId());
+            if (updateBook == null) {
+                throw new BookNotFoundException("The book does not exist");
+            }
+            updateBook.setInactive(true);
+            dynamoDbMapper.save(updateBook);
+            updateBook.setVersion(updateBook.getVersion() + 1);
+            updateBook.setInactive(false);
+            dynamoDbMapper.save(updateBook);   // update existing book
+            return getLatestVersionOfBook(updateBook.getBookId());
+        }
+    }
 }

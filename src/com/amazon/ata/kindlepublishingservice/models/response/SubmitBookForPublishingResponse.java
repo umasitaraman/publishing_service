@@ -50,4 +50,11 @@ public class SubmitBookForPublishingResponse {
 
         public SubmitBookForPublishingResponse build() { return new SubmitBookForPublishingResponse(this); }
     }
+
+    @Override
+    public String toString() {
+        return "SubmitBookForPublishingResponse{" +
+                "publishingRecordId='" + publishingRecordId + '\'' +
+                '}';
+    }
 }

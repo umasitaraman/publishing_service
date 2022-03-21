@@ -79,10 +79,11 @@ public class PublishingStatusDao {
         return item;
     }
 
-    public List<PublishingStatusItem> getPublishingStatuses(String publishingStatusId) {
+    public List<PublishingStatusItem> getPublishingStatus(String publishingStatusId) {
 
         PublishingStatusItem publishingStatusItem = new PublishingStatusItem();
         publishingStatusItem.setPublishingRecordId(publishingStatusId);
+
 
         DynamoDBQueryExpression<PublishingStatusItem> queryExpression =
                                 new DynamoDBQueryExpression<PublishingStatusItem>()
@@ -91,7 +92,7 @@ public class PublishingStatusDao {
         PaginatedQueryList<PublishingStatusItem> publishingStatusItemList =
                                 dynamoDbMapper.query(PublishingStatusItem.class, queryExpression);
 
-        if(publishingStatusItemList.size() == 0) {
+        if(publishingStatusItemList.isEmpty()) {
             throw new PublishingStatusNotFoundException("Publishing statuses not found");
         }
 

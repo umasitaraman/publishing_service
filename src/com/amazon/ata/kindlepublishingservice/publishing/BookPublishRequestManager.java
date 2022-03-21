@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import java.util.*;
 
 public class BookPublishRequestManager {
-    private Queue<BookPublishRequest> bookPublishRequestsList = new ArrayDeque<>();
+    private Queue<BookPublishRequest> bookPublishRequestsList;
 
     @Inject
     public BookPublishRequestManager(Queue<BookPublishRequest> bookPublishRequestsList) {
@@ -18,6 +18,9 @@ public class BookPublishRequestManager {
     }
 
     public BookPublishRequest getBookPublishRequestToProcess() {
+        if(bookPublishRequestsList.isEmpty()) {
+            return null;
+        }
        return bookPublishRequestsList.peek();
     }
 }

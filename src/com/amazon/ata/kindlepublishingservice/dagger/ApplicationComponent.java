@@ -26,5 +26,4 @@ public interface ApplicationComponent {
 
     ATAKindlePublishingServiceManager provideATAKindlePublishingServiceManager();
 
-    //BookPublishRequestManager provideBookPublishRequestManager();
 }

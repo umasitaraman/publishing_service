@@ -26,10 +26,4 @@ public class DataAccessModule {
 
         return new DynamoDBMapper(amazonDynamoDBClient);
     }
-
-
-    @Provides
-    public BookPublishRequestManager provideBookPublishRequestManager() {
-        return new BookPublishRequestManager(new ArrayDeque<BookPublishRequest>());
-    }
 }
