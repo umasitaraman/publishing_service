@@ -21,6 +21,8 @@ public class BookPublishRequestManager {
         if(bookPublishRequestsList.isEmpty()) {
             return null;
         }
-       return bookPublishRequestsList.peek();
+        BookPublishRequest bookPublishRequest = bookPublishRequestsList.peek();
+        bookPublishRequestsList.remove();
+       return bookPublishRequest;
     }
 }

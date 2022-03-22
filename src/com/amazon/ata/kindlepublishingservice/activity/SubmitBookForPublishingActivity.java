@@ -1,5 +1,7 @@
 package com.amazon.ata.kindlepublishingservice.activity;
 
+import com.amazon.ata.kindlepublishingservice.exceptions.BookNotFoundException;
+import com.amazon.ata.kindlepublishingservice.exceptions.KindlePublishingClientException;
 import com.amazon.ata.kindlepublishingservice.models.requests.SubmitBookForPublishingRequest;
 import com.amazon.ata.kindlepublishingservice.models.response.SubmitBookForPublishingResponse;
 import com.amazon.ata.kindlepublishingservice.converters.BookPublishRequestConverter;
@@ -56,7 +58,11 @@ public class SubmitBookForPublishingActivity {
         // TODO: Submit the BookPublishRequest for processing
 
         if (request.getBookId() != null) {
-            catalogDao.validateBookExists(request.getBookId());
+            try {
+                catalogDao.validateBookExists(request.getBookId());
+            } catch (BookNotFoundException e) {
+                throw new KindlePublishingClientException("The request book is not found in the catalog.");
+            }
         }
 
         final BookPublishRequest bookPublishRequest = BookPublishRequestConverter.toBookPublishRequest(request);
