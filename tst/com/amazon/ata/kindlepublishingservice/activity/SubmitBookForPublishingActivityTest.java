@@ -7,6 +7,7 @@ import com.amazon.ata.kindlepublishingservice.dao.CatalogDao;
 import com.amazon.ata.kindlepublishingservice.dao.PublishingStatusDao;
 import com.amazon.ata.kindlepublishingservice.dynamodb.models.PublishingStatusItem;
 import com.amazon.ata.kindlepublishingservice.enums.PublishingRecordStatus;
+import com.amazon.ata.kindlepublishingservice.publishing.BookPublishRequestManager;
 import com.amazon.ata.kindlepublishingservice.exceptions.BookNotFoundException;
 import com.amazon.ata.kindlepublishingservice.publishing.BookPublishRequest;
 
@@ -31,6 +32,12 @@ public class SubmitBookForPublishingActivityTest {
 
     @Mock
     private PublishingStatusDao publishingStatusDao;
+
+    @Mock
+    private CatalogDao catalogDao;
+
+    @Mock
+    private BookPublishRequestManager bookPublishRequestManager;
 
     @InjectMocks
     private SubmitBookForPublishingActivity activity;
@@ -84,6 +91,7 @@ public class SubmitBookForPublishingActivityTest {
         SubmitBookForPublishingResponse response = activity.execute(request);
 
         // THEN
+
         assertEquals("publishing.123", response.getPublishingRecordId(), "Expected response to return a publishing" +
                 "record id.");
     }

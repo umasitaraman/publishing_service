@@ -58,11 +58,7 @@ public class SubmitBookForPublishingActivity {
         // TODO: Submit the BookPublishRequest for processing
 
         if (request.getBookId() != null) {
-            try {
-                catalogDao.validateBookExists(request.getBookId());
-            } catch (BookNotFoundException e) {
-                throw new KindlePublishingClientException("The request book is not found in the catalog.");
-            }
+            catalogDao.validateBookExists(request.getBookId());
         }
 
         final BookPublishRequest bookPublishRequest = BookPublishRequestConverter.toBookPublishRequest(request);

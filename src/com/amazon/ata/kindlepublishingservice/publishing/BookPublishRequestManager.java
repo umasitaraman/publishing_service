@@ -18,11 +18,6 @@ public class BookPublishRequestManager {
     }
 
     public BookPublishRequest getBookPublishRequestToProcess() {
-        if(bookPublishRequestsList.isEmpty()) {
-            return null;
-        }
-        BookPublishRequest bookPublishRequest = bookPublishRequestsList.peek();
-        bookPublishRequestsList.remove();
-       return bookPublishRequest;
+        return bookPublishRequestsList.poll();
     }
 }
