@@ -35,6 +35,8 @@ public class Controller {
     @PostMapping(value = "/books", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<?> submitBookForPublishing(@Valid @RequestBody Book book) {
 
+        System.out.println("Submit request");
+
         SubmitBookForPublishingActivity submitBookForPublishingActivity = component.provideSubmitBookForPublishingActivity();
 
         SubmitBookForPublishingRequest submitBookForPublishingRequest = SubmitBookForPublishingRequest.builder()
