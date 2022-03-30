@@ -28,15 +28,20 @@ public class BookPublishTask implements Runnable {
 
         BookPublishRequest bookPublishRequest = bookPublishRequestManager.getBookPublishRequestToProcess();
 
-        while (bookPublishRequest == null) {
-//            try {
-//                Thread.sleep(1000);
+        int count = 0;
+        while (bookPublishRequest == null && count < 100) {
+            try {
+                Thread.sleep(1000);
                 bookPublishRequest = bookPublishRequestManager.getBookPublishRequestToProcess();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+                count++;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
+        if(bookPublishRequest == null) {
+            return;
+        }
 
         PublishingStatusItem item = publishingStatusDao.setPublishingStatus
                 (bookPublishRequest.getPublishingRecordId(),
@@ -44,14 +49,6 @@ public class BookPublishTask implements Runnable {
                         bookPublishRequest.getBookId());
 
         KindleFormattedBook kindleFormattedBook = KindleFormatConverter.format(bookPublishRequest);
-
-        while(!item.getStatus().equals(PublishingRecordStatus.IN_PROGRESS)) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
 
         try {
             CatalogItemVersion book = catalogDao.createOrUpdateBook(kindleFormattedBook);
