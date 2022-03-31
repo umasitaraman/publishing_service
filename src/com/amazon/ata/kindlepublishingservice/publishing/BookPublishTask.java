@@ -28,16 +28,16 @@ public class BookPublishTask implements Runnable {
 
         BookPublishRequest bookPublishRequest = bookPublishRequestManager.getBookPublishRequestToProcess();
 
-        int count = 0;
-        while (bookPublishRequest == null && count < 100) {
-            try {
-                Thread.sleep(1000);
-                bookPublishRequest = bookPublishRequestManager.getBookPublishRequestToProcess();
-                count++;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        int count = 0;
+//        while (bookPublishRequest == null && count < 100) {
+//            try {
+//                Thread.sleep(1000);
+//                bookPublishRequest = bookPublishRequestManager.getBookPublishRequestToProcess();
+//                count++;
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         if(bookPublishRequest == null) {
             return;
