@@ -3,11 +3,13 @@ package com.amazon.ata.kindlepublishingservice.controllers;
 import com.amazon.ata.kindlepublishingservice.*;
 import com.amazon.ata.kindlepublishingservice.activity.GetBookActivity;
 import com.amazon.ata.kindlepublishingservice.activity.GetPublishingStatusActivity;
+import com.amazon.ata.kindlepublishingservice.activity.RemoveBookFromCatalogActivity;
 import com.amazon.ata.kindlepublishingservice.activity.SubmitBookForPublishingActivity;
 import com.amazon.ata.kindlepublishingservice.dagger.ApplicationComponent;
 import com.amazon.ata.kindlepublishingservice.models.*;
 import com.amazon.ata.kindlepublishingservice.models.requests.GetBookRequest;
 import com.amazon.ata.kindlepublishingservice.models.requests.GetPublishingStatusRequest;
+import com.amazon.ata.kindlepublishingservice.models.requests.RemoveBookFromCatalogRequest;
 import com.amazon.ata.kindlepublishingservice.models.requests.SubmitBookForPublishingRequest;
 import com.amazon.ata.kindlepublishingservice.models.response.SubmitBookForPublishingResponse;
 import org.springframework.http.HttpStatus;
@@ -29,7 +31,9 @@ public class Controller {
 
     @DeleteMapping(value = "/books/{id}")
     public ResponseEntity<?> removeBook(@PathVariable String id) {
-        return null;
+        RemoveBookFromCatalogActivity bookActivity = component.provideRemoveBookFromCatalogActivity();
+        RemoveBookFromCatalogRequest removeBookRequest = RemoveBookFromCatalogRequest.builder().withBookId(id).build();
+        return new ResponseEntity<>(bookActivity.execute(removeBookRequest), HttpStatus.OK);
     }
 
     @PostMapping(value = "/books", consumes = {"application/json"}, produces = {"application/json"})
