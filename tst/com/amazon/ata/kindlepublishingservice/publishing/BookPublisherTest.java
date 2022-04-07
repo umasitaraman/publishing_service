@@ -38,7 +38,7 @@ public class BookPublisherTest {
         bookPublisher.start();
 
         // THEN
-        verify(scheduledExecutorService).scheduleWithFixedDelay(publishTask, 0, 1,
+        verify(scheduledExecutorService).scheduleWithFixedDelay(publishTask, 1, 1,
             TimeUnit.SECONDS);
         assertTrue(bookPublisher.isRunning(), "Expected publisher to be running after a call to start().");
     }
@@ -53,7 +53,7 @@ public class BookPublisherTest {
 
         // THEN
         // schedule started in the call to start in the GIVEN, and not again from the call to start in the WHEN
-        verify(scheduledExecutorService, times(1)).scheduleWithFixedDelay(publishTask, 0, 1,
+        verify(scheduledExecutorService, times(1)).scheduleWithFixedDelay(publishTask, 1, 1,
             TimeUnit.SECONDS);
         assertTrue(bookPublisher.isRunning(), "Expected publisher to be running after a call to start().");
     }
@@ -70,7 +70,7 @@ public class BookPublisherTest {
         // THEN
         // schedule started in the call to start in the GIVEN, schedule stopped in the call to stop in the GIVEN,
         // schedule restarted in the call to start in the WHEN
-        verify(scheduledExecutorService, times(2)).scheduleWithFixedDelay(publishTask, 0, 1,
+        verify(scheduledExecutorService, times(2)).scheduleWithFixedDelay(publishTask, 1, 1,
             TimeUnit.SECONDS);
         assertTrue(bookPublisher.isRunning(), "Expected publisher to be running after a call to start().");
     }

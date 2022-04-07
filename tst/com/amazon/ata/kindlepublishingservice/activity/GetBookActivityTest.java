@@ -1,5 +1,6 @@
 package com.amazon.ata.kindlepublishingservice.activity;
 
+import com.amazon.ata.kindlepublishingservice.clients.RecommendationsServiceCachingClient;
 import com.amazon.ata.recommendationsservice.types.BookGenre;
 import com.amazon.ata.kindlepublishingservice.models.Book;
 import com.amazon.ata.kindlepublishingservice.models.requests.GetBookRequest;
@@ -35,12 +36,13 @@ public class GetBookActivityTest {
     private CatalogDao catalogDao;
 
     @Mock
-    private RecommendationsServiceClient recommendationsServiceClient;
+    private RecommendationsServiceCachingClient cachingClient;
 
     @InjectMocks
     private GetBookActivity activity;
 
     @BeforeEach
+
     public void setup(){
         initMocks(this);
     }
@@ -61,7 +63,7 @@ public class GetBookActivityTest {
 
         List<BookRecommendation> bookRecommendations = new ArrayList<>();
         bookRecommendations.add(new BookRecommendation(TITLE, AUTHOR, ASIN));
-        when(recommendationsServiceClient.getBookRecommendations(BookGenre.FANTASY)).thenReturn(bookRecommendations);
+        when(cachingClient.getBookRecommendations(BookGenre.FANTASY)).thenReturn(bookRecommendations);
         when(catalogDao.getBookFromCatalog(BOOK_ID)).thenReturn(catalogItem);
 
         // WHEN
@@ -91,4 +93,37 @@ public class GetBookActivityTest {
         assertThrows(BookNotFoundException.class, () -> activity.execute(request), "Expected activity to " +
                 "throw an exception if the book can't be found.");
     }
+
+    @Test
+    public void execute_callMethodTwice_recommendationServiceClientCalledOnlyOnce() {
+        // GIVEN
+        GetBookRequest request = GetBookRequest
+                .builder()
+                .withBookId(BOOK_ID)
+                .build();
+
+        CatalogItemVersion catalogItem = new CatalogItemVersion();
+        catalogItem.setVersion(1);
+        catalogItem.setBookId(BOOK_ID);
+        catalogItem.setInactive(false);
+        catalogItem.setGenre(BookGenre.FANTASY);
+
+        List<BookRecommendation> bookRecommendations = new ArrayList<>();
+        bookRecommendations.add(new BookRecommendation(TITLE, AUTHOR, ASIN));
+        when(cachingClient.getBookRecommendations(BookGenre.FANTASY)).thenReturn(bookRecommendations);
+        when(catalogDao.getBookFromCatalog(BOOK_ID)).thenReturn(catalogItem);
+
+        // WHEN
+        GetBookResponse response = activity.execute(request);
+
+        // THEN
+        assertNotNull(response, "Expected request to return a non-null response.");
+        assertNotNull(response.getBook(), "Expected a non null book in the response.");
+        Book book = response.getBook();
+        assertEquals(BOOK_ID, book.getBookId(), "Expected book in response to contain id passed in request.");
+        assertNotNull(response.getRecommendations(), "Expected non null book recommendations in the response.");
+        assertEquals(TITLE, response.getRecommendations().get(0).getTitle(), "Expected recommendations in the " +
+                "response to match recommendations returned by recommendations service.");
+    }
+
 }
