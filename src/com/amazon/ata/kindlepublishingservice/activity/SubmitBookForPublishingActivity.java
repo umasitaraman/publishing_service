@@ -60,7 +60,6 @@ public class SubmitBookForPublishingActivity {
         if (request.getBookId() != null) {
             catalogDao.validateBookExists(request.getBookId());
         }
-
         final BookPublishRequest bookPublishRequest = BookPublishRequestConverter.toBookPublishRequest(request);
 
         bookPublishRequestManager.addBookPublishRequest(bookPublishRequest);
